@@ -1,31 +1,41 @@
 import os
 from PIL import Image
 
-dir_path = input('Umístění složky: ')
-os.chdir(dir_path)
-print('Soubory ve složce: ')
+print("""
+------------------------------------------
+        Měnič rozlišení fotek
+------------------------------------------""")
+
+print("""
+Vyberte kvalitu exportu:
+ 
+    1 - 75 %
+    2 - 50 %
+    3 - 25 %
+    """)
+
+
+exports = [0.75, 0.5, 0.25]
+exts = ['.jpg', '.png', '.jpeg']
+
+selection = int(input()) - 1
+
+cwd = os.getcwd()
+os.mkdir('export')
+
 for f in os.listdir():
-    print(f)
 
-print()
-basewidth = int(input('Požadovaná šířka v pixelech: '))
-print()
+    if os.path.splitext(f)[1].lower() not in exts:
+        continue
 
-for f in os.listdir():
-    print(f)
-    
-    img = Image.open(f)
-    print(img.format, img.size, img.mode)
+    with Image.open(f) as img:
+        img = img.resize((int(img.size[0] * exports[selection]),   # resizes the image
+                          int(img.size[1] * exports[selection])))
 
-    f_name, f_ext = os.path.splitext(f)
-    
-    wpercent = (basewidth / float(img.size[0]))
-    hsize = int((float(img.size[1]) * float(wpercent)))
-    img = img.resize((basewidth, hsize))
+        f_name, f_ext = os.path.splitext(f)
 
-    print('new size: '+str(img.size))
+        os.chdir('export')
+        img.save('{}_{}x{}{}'.format(f_name, str(img.size[0]), str(img.size[1]), f_ext))  # saves the image
+        os.chdir(cwd)
 
-    img.save('{}x{} {}{}'.format(str(img.size[0]), str(img.size[1]), f_name, f_ext))
-    img.close()
-
-    print()
+input('Hotovo')
