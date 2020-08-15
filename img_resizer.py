@@ -3,11 +3,11 @@ from PIL import Image
 
 print("""
 ------------------------------------------
-        Měnič rozlišení fotek
+        Photo size downgrader
 ------------------------------------------""")
 
 print("""
-Vyberte kvalitu exportu:
+Choose downgrade percentage:
  
     1 - 75 %
     2 - 50 %
@@ -38,4 +38,4 @@ for f in os.listdir():
         img.save('{}_{}x{}{}'.format(f_name, str(img.size[0]), str(img.size[1]), f_ext))  # saves the image
         os.chdir(cwd)
 
-input('Hotovo')
+input('Done')
